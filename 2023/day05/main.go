@@ -11,7 +11,6 @@ import (
 
 func main() {
     part1()
-    // part2()
 }
 
 func part1() {
@@ -53,22 +52,47 @@ func part1() {
     }
     // For all seeds, traverse all rules
     locations := []int{}
-    for _, seedString := range seeds {
-        seed, _ := strconv.Atoi(seedString)
-        for _, mn := range(mapNames) {
-            for _, rule := range(mapRules[mn]) {
-                if seed >= rule.Src && seed < rule.Src + rule.Offset {
-                    // seed = rule.Dest - rule.Src + seed
-                    seed = seed - rule.Src + rule.Dest
-                    break
+
+    // Turn this to true for part 2
+    // Very slow, but works !!!
+    part2 := true
+
+    if (!part2) {
+        for _, seedString := range seeds {
+            seed, _ := strconv.Atoi(seedString)
+            for _, mn := range(mapNames) {
+                for _, rule := range(mapRules[mn]) {
+                    if seed >= rule.Src && seed < rule.Src + rule.Offset {
+                        // seed = rule.Dest - rule.Src + seed
+                        seed = seed - rule.Src + rule.Dest
+                        break
+                    }
                 }
             }
+            locations = append(locations, seed)
         }
-        locations = append(locations, seed)
+    } else {
+        //Part 2
+        for i := 0; i < len(seeds); i += 2 {
+            // from, _ := strconv.ParseInt(seeds[i], 10, 64)
+            // offset, _ := strconv.ParseInt(seeds[i+1], 10, 64)
+            from, _ := strconv.Atoi(seeds[i])
+            offset, _ := strconv.Atoi(seeds[i+1])
+            for j := from; j < from + offset; j++ {
+                seed := j
+                for _, mn := range(mapNames) {
+                    for _, rule := range(mapRules[mn]) {
+                        if seed >= rule.Src && seed < rule.Src + rule.Offset {
+                            // seed = rule.Dest - rule.Src + seed
+                            seed = seed - rule.Src + rule.Dest
+                            break
+                        }
+                    }
+                }
+                locations = append(locations, seed)
+            }
+        }
     }
     fmt.Println("------- The answer my friend is ", slices.Min(locations), "-------")
-}
-
-func part2() {
 }
 
