@@ -19,7 +19,8 @@ func part1() {
     scanner := bufio.NewScanner(file)
 
     // This is the final result
-    totalCount := 0
+    totalCountPart1 := 0
+    totalCountPart2 := 0
 
     for scanner.Scan() {
         line := strings.Fields(scanner.Text())
@@ -46,12 +47,18 @@ func part1() {
             }
         }
 
+        lineCountPart2 := 0
         // Walk back and find the prection for this line
         for l := len(layers) - 1; l >= 0; l-- {
-            totalCount += layers[l][len(layers[l]) - 1]
+            totalCountPart1 += layers[l][len(layers[l]) - 1]
+            if l > 0 {
+                lineCountPart2 = layers[l-1][0] - lineCountPart2
+            }
         }
+        totalCountPart2 += lineCountPart2
     }
-    fmt.Println("----- The Answer My Friend Is :", totalCount, " -----")
+    fmt.Println("----- Part 1 - The Answer My Friend Is :", totalCountPart1, " -----")
+    fmt.Println("----- Part 2 - The Answer My Friend Is :", totalCountPart2, " -----")
 }
 
 func part2() {
