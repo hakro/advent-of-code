@@ -51,6 +51,7 @@ func part1() {
     currentLoc := -1
     lastLoc := -1
     move := 0
+    loopPoints := []int{} // Used for Part 2
     for currentLoc != sLoc {
         if move == 0 {
             currentLoc = sLoc
@@ -102,8 +103,21 @@ func part1() {
             }
         }
         move++
+        loopPoints = append(loopPoints, currentLoc) // For part 2
     }
 
+    for i, _ := range file {
+        if (i+1) % w == 0 {
+            print("\n")
+        }
+        if slices.Contains(loopPoints, i) {
+            print("X")
+        } else {
+            print(".")
+        }
+    }
+
+    println()
     println("----- The Answer My Friend Is : ", (move + 1) / 2, " -----")
 }
 
