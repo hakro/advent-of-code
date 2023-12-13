@@ -19,6 +19,7 @@ func part1() {
     h := 0 // number of lines
     w := 0
 
+    part2 := true
     scanner := bufio.NewScanner(file)
     // foreach line
     for scanner.Scan() {
