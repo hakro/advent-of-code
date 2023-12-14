@@ -13,12 +13,14 @@ func main() {
 }
 
 func part1() {
-    file, _ := os.Open("input.txt")
+    file, _ := os.Open("input-example.txt")
     scanner := bufio.NewScanner(file)
 
     // This the final result
     sum := 0
-    blocks := make([][]string, 100)
+    sum2 := 0
+    part2 := true
+    blocks := make([][]string, 2)
 
     n := 0
     for scanner.Scan() {
@@ -40,8 +42,24 @@ func part1() {
                     sUp += b[i - offset + j]
                     sDown += b[i+1 + offset -j]
                 }
-                if sUp == sDown {
-                    sum += 100 * (i + 1)
+                if part2 {
+                    smudgeCount := 0
+                    smudgeIndex := -1
+                    for k := 0; k < len(sUp); k++ {
+                        if sUp[k] != sDown[k] {
+                            smudgeCount++
+                            smudgeIndex = k
+                        }
+                    }
+                    if smudgeCount == 1 {
+                        sUp = sUp[:smudgeIndex] + flipSmudge(string(sUp[smudgeIndex])) + sUp[smudgeIndex+1:]
+                        sum2 += 100 * (i + 1)
+                    }
+                } else {
+                    // Part 1
+                    if sUp == sDown {
+                        sum += 100 * (i + 1)
+                    }
                 }
             }
         }
@@ -55,13 +73,38 @@ func part1() {
                     sLeft += getCol(b, i - offset + j)
                     sRight += getCol(b, i+1 + offset -j)
                 }
-                if sLeft == sRight {
-                    sum += i + 1
+                if part2 {
+                    smudgeCount := 0
+                    smudgeIndex := -1
+                    for k := 0; k < len(sLeft); k++ {
+                        if sLeft[k] != sRight[k] {
+                            smudgeCount++
+                            smudgeIndex = k
+                        }
+                    }
+                    fmt.Println("count: ", smudgeCount)
+                    if smudgeCount == 1 {
+                        sLeft = sLeft[:smudgeIndex] + flipSmudge(string(sLeft[smudgeIndex])) + sLeft[smudgeIndex+1:]
+                        sum2 += i + 1
+                    }
+                } else {
+                    // Part1
+                    if sLeft == sRight {
+                        sum += i + 1
+                    }
                 }
             }
         }
     }
     fmt.Println("----- The Answer My Friend is:", sum ," -----")
+    fmt.Println("----- The Answer My Friend for PART2 is:", sum2 ," -----")
+}
+
+func flipSmudge(s string) string {
+    if s == "#" {
+        return "."
+    }
+    return "#"
 }
 
 // Get the column from a block
