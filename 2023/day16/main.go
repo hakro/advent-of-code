@@ -38,8 +38,43 @@ func part1() {
 
 
     visit(point{0,0}, right)
-    fmt.Println("---- The Answer My Friend Is:", len(visited), "-----")
+    fmt.Println("---- The Part 1 Answer My Friend Is:", len(visited), "-----")
 
+
+    // Part 2
+    // clearAll()
+    topRes := 0
+    // Check from top to bottom
+    for i := 0; i < len(input[0]); i++ {
+        clearAll()
+        visit(point{i, 0}, down)
+        topRes = max(topRes, len(visited))
+    }
+    // Check from bottom to top
+    for i := 0; i < len(input[0]); i++ {
+        clearAll()
+        visit(point{i, len(input) - 1}, up)
+        topRes = max(topRes, len(visited))
+    }
+    // Check from left to right
+    for i := 0; i < len(input); i++ {
+        clearAll()
+        visit(point{0, i}, right)
+        topRes = max(topRes, len(visited))
+    }
+    // Check from right to left
+    for i := 0; i < len(input); i++ {
+        clearAll()
+        visit(point{len(input[0]) - 1, i}, left)
+        topRes = max(topRes, len(visited))
+    }
+    fmt.Println("---- The Part 2 Answer My Friend Is:", topRes, "-----")
+
+}
+
+func clearAll() {
+    visited = nil
+    clear(visitedDirs)
 }
 
 func visit(next point, direction string) {
