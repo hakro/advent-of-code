@@ -26,9 +26,29 @@ func part1() {
     area := []vertex{vertex{0, 0}}
     bounds := 0
 
+    part2 := true
+
     for scanner.Scan() {
         dir := strings.Fields(scanner.Text())[0]
         moveCount, _ := strconv.Atoi(strings.Fields(scanner.Text())[1])
+
+        if part2 {
+            hexString := strings.Fields(scanner.Text())[2]
+            hexString = hexString[1 : len(hexString) - 1]
+            hexMove, _ := strconv.ParseInt(hexString[1:len(hexString) - 1], 16, 32)
+            moveCount = int(hexMove)
+            switch string(hexString[len(hexString) - 1]) {
+            case "0":
+                dir = "R"
+            case "1":
+                dir = "D"
+            case "2":
+                dir = "L"
+            case "3":
+                dir = "U"
+            }
+        }
+
         bounds += moveCount
         lastPt := area[len(area) - 1]
         var newPt vertex
@@ -50,8 +70,6 @@ func part1() {
     // i = Area(shoelace) - b/2 + 1
     // We're looking for internal + boundaries, so :
     // i + b = Area + b/2 + 1
-    fmt.Println(int(shoelace(area)))
-    fmt.Println(bounds / 2)
     res := int(shoelace(area)) + (bounds / 2) + 1
     fmt.Println("----- The Answer My Friend Is : ", res, " -----")
 }
