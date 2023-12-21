@@ -40,7 +40,7 @@ func (m *module) send(pulse bool, from string) bool {
 		return m.state
 
 	case "&":
-		// TODO: Update memory for current input
+		// Update memory for current input
 		m.pulseMem[from] = pulse
 		out := false
 		for _, v := range m.pulseMem {
@@ -121,8 +121,6 @@ func part1() {
 	}
 
 	fmt.Println("----- The Answer My Friend Is : ", highCount*lowCount, " -----")
-	/* fmt.Println("high: ", highCount) */
-	/* fmt.Println("low: ", lowCount) */
 }
 
 func part2() {
