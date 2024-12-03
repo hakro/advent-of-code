@@ -21,6 +21,7 @@ int main() {
 		//read each int
 		int num;
 		int last_num;
+		int line_dumpeners = 0;
 		char *token;
 		// Iterate on each number in a line
 		token = strtok(line, " ");
@@ -38,8 +39,12 @@ int main() {
 
 			// Check two adjacent levels differ by at least one and at most three
 			if (!(abs(num - last_num) >= 1 && abs(num - last_num) <= 3 )) {
-				safe = 0;
-				break;
+				if (line_dumpeners == 0) {
+					line_dumpeners++;
+				} else {
+					safe = 0;
+					break;
+				}
 			}
 
 			if (num > last_num) {
