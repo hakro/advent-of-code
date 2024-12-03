@@ -4,41 +4,51 @@
 
 int main() {
 	FILE *f = fopen("input.txt", "r");
+	int part = 2; // Part 1 or 2 
 	if (f == NULL) {
 		printf("Unable to open input file\n");
 		return 1;
 	}
 
-	// Read line by line
+	// Read line by line (reports)
 	int count_safe_lines = 0; // Part1 result
 	char line[30];
 	while (fgets(line, sizeof(line), f)) {
 		int safe = 1; // Line is considered safe until proven otherwise
 		int count_up = 0;
 		int count_down = 0;
-		int i = -1; //index of number being read
+		int i = -1; //index of number being read in a line
 		//read each int
 		int num;
 		int last_num;
 		char *token;
+		// Iterate on each number in a line
 		token = strtok(line, " ");
 		while (token != NULL) {
-			if (i > -1) {
-				last_num = num;
+			// Nothing to do on the first one
+			if (i == -1) {
+				num = atoi(token);
+				token = strtok(NULL, " ");
+				i++;
+				continue;
 			}
+
+			last_num = num;
 			num = atoi(token);
-			if (i > -1) {
-				// Check two adjacent levels differ by at least one and at most three
-				if (!(abs(num - last_num) >= 1 && abs(num - last_num) <= 3 )) {
-					safe = 0;
-					break;
-				}
-				if (num > last_num) {
-					count_up++;
-				} else {
-					count_down++;
-				}
+
+			// Check two adjacent levels differ by at least one and at most three
+			if (!(abs(num - last_num) >= 1 && abs(num - last_num) <= 3 )) {
+				safe = 0;
+				break;
 			}
+
+			if (num > last_num) {
+				count_up++;
+			} else {
+				count_down++;
+			}
+
+			// Next Token
 			token = strtok(NULL, " ");
 			i++;
 		}
@@ -51,6 +61,7 @@ int main() {
 		}
 		/* printf("up: %d -- down: %d\n", count_up, count_down); */
 	}
+
 	printf("Part1 result - Safe reports count : %d\n", count_safe_lines);
 	
 	fclose(f);
