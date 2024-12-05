@@ -17,6 +17,7 @@ int check_diag_up_right(char **table, size_t l, size_t c, size_t max);
 int check_diag_down_left(char **table, size_t l, size_t c, size_t max);
 int check_diag_down_right(char **table, size_t l, size_t c, size_t max);
 int get_all_xmases_for_pos(char **table, size_t l, size_t c, size_t max); //Returns the total xmas words
+int check_x_mas_part2(char **table, size_t l, size_t c, size_t max);
 
 int main() {
 
@@ -25,7 +26,8 @@ int main() {
 		printf("err: cant read input file");
 		return 1;
 	}
-	int solution = 0;
+	int solution1 = 0;
+	int solution2 = 0;
 	size_t nb_lines = 0;
 	size_t nb_columns = 0;
 
@@ -49,6 +51,10 @@ int main() {
 
 	for (int l = 0; l < nb_lines; l++) {
 		for (int c = 0; c < nb_columns; c++) {
+			if (table[l][c] == 'A') {
+				solution2 += check_x_mas_part2(table, l, c, nb_columns);
+			} 
+
 			if (table[l][c] != 'X') {
 				continue;
 			}
@@ -60,10 +66,11 @@ int main() {
 			/* printf("--> %d\n", check_diag_up_right(table, l, c, nb_columns)); */
 			/* printf("--> %d\n", check_diag_down_left(table, l, c, nb_columns)); */
 			/* printf("--> %d\n", check_diag_down_right(table, l, c, nb_columns)); */
-			solution += get_all_xmases_for_pos(table, l, c, nb_columns);
+			solution1 += get_all_xmases_for_pos(table, l, c, nb_columns);
 		}
 	}
-	printf("Part1 solution : %d\n", solution);
+	printf("Part1 solution : %d\n", solution1);
+	printf("Part1 solution : %d\n", solution2);
 	
 
 	// -------- Clean up ------------ //
@@ -200,4 +207,16 @@ int get_all_xmases_for_pos(char **table, size_t l, size_t c, size_t max) {
 	total += check_diag_down_right(table, l, c, max);
 
 	return total;
+}
+
+int check_x_mas_part2(char **table, size_t l, size_t c, size_t max) {
+	// Check the A in the center is within bounds
+	if (l <= max - 2 && l >= 1 && c <= max - 2 && c >= 1) {
+		if ((table[l-1][c-1] == 'M' && table[l+1][c+1] == 'S') || (table[l-1][c-1] == 'S' && table[l+1][c+1] == 'M')) {
+			if ((table[l-1][c+1] == 'M' && table[l+1][c-1] == 'S') || (table[l-1][c+1] == 'S' && table[l+1][c-1] == 'M')) {
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
